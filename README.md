@@ -1,11 +1,12 @@
-By Morten Jansrud and Endre Gjølstad!  
+By Morten Jansrud and Endre Gjølstad! 
+TTK4145 - Sanntidsprogrammering
 Uuntz.
 
 Explanation of packages:
 -----------------------
 
 Main: The executing package upon program start.  
-Startup: Guarantees a successfull startup, creates all necessary threads and a backup terminal  
+Startup: Guarantees a successful startup, creates all necessary threads and a backup terminal  
 Driver: Is a set of functions to control the elevator  
 Hardware: Lowest level interface to interact with the elvator  
 Events: Event loops, the brain of the system  
