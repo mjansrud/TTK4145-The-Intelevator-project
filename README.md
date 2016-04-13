@@ -1,5 +1,5 @@
-By Morten Jansrud and Endre Gjølstad! 
-TTK4145 - Sanntidsprogrammering
+By Morten Jansrud and Endre Gjølstad!  
+TTK4145 - Sanntidsprogrammering  
 Uuntz.
 
 Explanation of packages:
