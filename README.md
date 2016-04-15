@@ -1,5 +1,6 @@
 By Morten Jansrud and Endre Gjølstad!  
 TTK4145 - Sanntidsprogrammering  
+Written in golang - communication over UDP. 
 Uuntz.
 
 Explanation of packages:
