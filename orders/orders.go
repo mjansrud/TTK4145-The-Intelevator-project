@@ -210,6 +210,7 @@ func PrioritizeOrder(order *utilities.Order) {
 
 		//Set target elevator to the elevator most appropriate
 		mutex.Lock()
+		order.Time = time.Now()
 		order.Elevator = priority.Elevator
 		mutex.Unlock()
 
