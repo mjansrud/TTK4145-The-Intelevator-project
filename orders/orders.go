@@ -7,7 +7,6 @@ import (
 	"../utilities"
 	"fmt"
 	"math"
-	"reflect"
 	"sync"
 	"time"
 )
@@ -242,7 +241,7 @@ func InsertOfflineOrder(order utilities.Order) {
 		for index := range local_offline {
 
 			//Check if all fields are alike
-			if reflect.DeepEqual(local_offline[index], order) {
+			if IsOrdersEqual(local_offline[index], order) {
 
 				found = true
 
@@ -343,7 +342,7 @@ func CheckOrderExists(order utilities.Order) bool {
 	if len(local_orders) > 0 {
 		for index := range local_orders {
 			//Check if all fields are alike
-			if reflect.DeepEqual(local_orders[index], order) {
+			if IsOrdersEqual(local_orders[index], order) {
 				return true
 			}
 		}
@@ -390,7 +389,7 @@ func InitCompleteOrder(channel_write chan utilities.Packet, order utilities.Orde
 	for index := range local_orders {
 
 		//Check if all fields are alike
-		if reflect.DeepEqual(local_orders[index], order) {
+		if IsOrdersEqual(local_orders[index], order) {
 
 			//Open door for the specific elevator
 			if order.Elevator == network.GetMachineID() {
@@ -530,7 +529,7 @@ func SetOrders(list []utilities.Order, channel_write chan utilities.Packet) {
 		for offline_index := range orders_offline {
 
 			//Check if all fields are alike
-			if reflect.DeepEqual(list[index], orders_offline[offline_index]) {
+			if IsOrdersEqual(list[index], orders_offline[offline_index]) {
 
 				found = true
 
@@ -541,6 +540,20 @@ func SetOrders(list []utilities.Order, channel_write chan utilities.Packet) {
 			InsertOrder(list[index])
 		}
 	}
+}
+
+//Checking if orders are equal without checking timestamp
+func IsOrdersEqual(order utilities.Order, compare_order utilities.Order) bool{
+
+	if(order.Elevator  == compare_order.Elevator &&
+		order.Category  == compare_order.Category &&
+		order.Direction == compare_order.Direction &&
+		order.Floor     == compare_order.Floor &&
+		order.Button    == compare_order.Button){
+		return true
+	} 
+
+	return false
 }
 
 //Printing functionality
