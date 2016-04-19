@@ -72,6 +72,7 @@ func PollOrder(ch_order_poll chan utilities.Order) {
 			//Register the new order
 			new_order.Floor = polled_order_floor
 			new_order.Button = polled_order_button
+			new_order.Time = time.Now()
 			ch_order_poll <- new_order
 		}
 
@@ -121,6 +122,29 @@ func StatusChecker(channel_write chan utilities.Packet) {
 				states.RemoveExternalElevator(elevator)
 				orders.PrioritizeOrders()
 			}
+		}
+
+		if(states.GetState() != utilities.STATE_EMERGENCY){
+
+			local_orders := orders.GetOrders()
+			for orders_index := range local_orders {
+
+				//Fetch specific order for easier syntax
+				order := local_orders[orders_index]
+
+				//Calculate time
+				elapsed := time.Since(order.Time)
+				elapsed = (elapsed + time.Second/2) / time.Second
+
+				//Check for timeout 
+				if order.Elevator == network.GetMachineID() && elapsed > 20 {
+					
+					states.SetState(utilities.STATE_EMERGENCY)
+					orders.PrioritizeOrders()
+
+				}
+			}
+
 		}
 
 		time.Sleep(1 * time.Second)
@@ -197,7 +221,7 @@ func NetworkListener(channel_listen chan utilities.Packet, channel_write chan ut
 
 						//Check if this is not the sending machine
 						if !orders.CheckOrderExists(message_receive.Order) {
-							orders.InsertOrder(message_receive.Order)
+							orders.InsertOrder(message_receive.Order) 
 						}
 						break
 

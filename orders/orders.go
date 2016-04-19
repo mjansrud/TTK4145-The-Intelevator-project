@@ -147,6 +147,10 @@ func PrioritizeOrder(order *utilities.Order) {
 		priority.Count += PrioritizeFloor(states.GetFloor(), copy.Floor)
 		priority.Count += PrioritizeDirection(states.GetState(), states.GetDirection(), copy.Direction)
 
+		if(states.GetState() == utilities.STATE_EMERGENCY){
+			priority.Count -= 20 
+		}
+
 		//Add priority
 		priorities = append(priorities, priority)
 

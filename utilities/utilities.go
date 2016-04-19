@@ -106,6 +106,7 @@ type Order struct {
 	Direction	int
 	Floor 		int  
 	Button      int
+	Time		time.Time
 }
 type Floor struct {
 	Current int
