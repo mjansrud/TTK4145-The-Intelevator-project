@@ -144,7 +144,7 @@ func StatusChecker(channel_write chan utilities.Packet) {
 				if order.Elevator == network.GetMachineID() && elapsed > 20 {
 					
 					states.SetState(utilities.STATE_EMERGENCY)
-					order.Time= Time.Now()
+					orders.ResetOrderTimer(order)
 					orders.PrioritizeOrders()
 
 					//Let the external pc's wait to receive a status message

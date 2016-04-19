@@ -268,6 +268,22 @@ func InsertOfflineOrder(order utilities.Order) {
 
 }
 
+func ResetOrderTimer(order utilities.Order){
+
+	local_orders := GetOrders()
+	
+	for index := range local_orders {
+	
+		//Check if all fields are alike
+		if IsOrdersEqual(local_orders[index], order) {
+
+			orders[index].Time = time.Now()
+
+		}
+	}
+
+}
+
 func CountRelevantOrders() int {
 
 	counter := 0
