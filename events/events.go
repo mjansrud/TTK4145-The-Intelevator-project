@@ -146,13 +146,15 @@ func StatusChecker(channel_write chan utilities.Packet) {
 					states.SetState(utilities.STATE_EMERGENCY)
 					orders.PrioritizeOrders()
 
+					//Let the external pc's wait to receive a status message
+					time.Sleep(1 * time.Second)
+
 					//Create and send message
 					message_send.Category = utilities.MESSAGE_REPRIORITIZE
 					packet_send.Data = network.EncodeMessage(message_send)
 					channel_write <- packet_send
 
 					fmt.Println(filename, " Reprioritize request sent")
-
 				}
 			}
 
