@@ -168,7 +168,7 @@ func PrioritizeOrder(order *utilities.Order) {
 				priority.Count += PrioritizeFloor(elevators[index].Floor, copy.Floor)
 				priority.Count += PrioritizeDirection(elevators[index].State, elevators[index].Direction, copy.Direction)
 
-				if(elevators[index].GetState() == utilities.STATE_EMERGENCY){
+				if(elevators[index].State == utilities.STATE_EMERGENCY){
 					priority.Count -= 20 
 				}
 
