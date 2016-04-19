@@ -22,6 +22,10 @@ var check_counter = 0
 
 func Handle(channel_poll_floor chan utilities.Floor, channel_poll_order chan utilities.Order, channel_write chan utilities.Packet) {
 
+	//Network messages
+	var message_send utilities.Message
+	var packet_send utilities.Packet
+
 	for {
 		select {
 		//Called when we have a new order
@@ -35,10 +39,6 @@ func Handle(channel_poll_floor chan utilities.Floor, channel_poll_order chan uti
 
 				//We we not want a duplicate order in the system
 				if !CheckOrderExists(current_order) {
-
-					//Network messages
-					var message_send utilities.Message
-					var packet_send utilities.Packet
 
 					//Create and send message
 					message_send.Category = utilities.MESSAGE_ORDER
@@ -76,7 +76,7 @@ func Handle(channel_poll_floor chan utilities.Floor, channel_poll_order chan uti
 	}
 }
 func PrioritizeState(elevator_state int) int {
-	if elevator_state == utilities.STATE_IDLE {
+	if elevator_state == utilities.STATE_IDLE || elevator_state == utilities.STATE_DOOR_OPEN  {
 		return 1
 	}
 	return 0
@@ -161,6 +161,7 @@ func PrioritizeOrder(order *utilities.Order) {
 
 				//Fetch elevator
 				priority.Elevator = elevators[index].Elevator
+				priority.Count = 0
 
 				//Calculate priority
 				priority.Count += PrioritizeState(elevators[index].State)
@@ -207,8 +208,8 @@ func PrioritizeOrder(order *utilities.Order) {
 
 		//Set target elevator to the elevator most appropriate
 		mutex.Lock()
-		order.Time = time.Now()
 		order.Elevator = priority.Elevator
+		order.Time = time.Now()
 		mutex.Unlock()
 
 	}
@@ -563,13 +564,18 @@ func SetOrders(list []utilities.Order, channel_write chan utilities.Packet) {
 //Checking if orders are equal without checking timestamp
 func IsOrdersEqual(order utilities.Order, compare_order utilities.Order) bool{
 
-	if( order.Elevator  == compare_order.Elevator &&
-		order.Category  == compare_order.Category &&
+	if(order.Category == utilities.BUTTON_INSIDE){
+		if(order.Elevator != compare_order.Elevator){
+			return false
+		}
+	}
+
+	if( order.Category  == compare_order.Category &&
 		order.Direction == compare_order.Direction &&
 		order.Floor     == compare_order.Floor &&
 		order.Button    == compare_order.Button){
 		return true
-	} 
+	}
 
 	return false
 }
