@@ -84,6 +84,10 @@ func PollOrder(ch_order_poll chan utilities.Order) {
 //Checks orders against elevators timestamps. Change order if a elevator has disconnected.
 func StatusChecker(channel_write chan utilities.Packet) {
 
+	//Network messages
+	var message_send utilities.Message
+	var packet_send utilities.Packet
+
 	//Run loop forever
 	for {
 
@@ -141,6 +145,13 @@ func StatusChecker(channel_write chan utilities.Packet) {
 					
 					states.SetState(utilities.STATE_EMERGENCY)
 					orders.PrioritizeOrders()
+
+					//Create and send message
+					message_send.Category = utilities.MESSAGE_REPRIORITIZE
+					packet_send.Data = network.EncodeMessage(message_send)
+					channel_write <- packet_send
+
+					fmt.Println(filename, " Reprioritize request sent")
 
 				}
 			}
@@ -263,7 +274,15 @@ func NetworkListener(channel_listen chan utilities.Packet, channel_write chan ut
 
 						fmt.Println(filename, " Orders sent")
 						break
+
+					case utilities.MESSAGE_REPRIORITIZE:
+
+						//Order fulfilled by another elvator
+						fmt.Println(filename, " Reprioritize")
+						orders.PrioritizeOrders()
+						break
 					}
+					
 				}
 
 			}
