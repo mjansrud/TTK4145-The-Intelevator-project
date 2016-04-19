@@ -13,6 +13,9 @@ const(
 	CONNECTED 			= 1
 )
 const(
+	EQUALS				= 0
+)
+const(
 	ELEVATORS			= 2
 )
 const(

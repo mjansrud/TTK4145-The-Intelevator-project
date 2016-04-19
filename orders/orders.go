@@ -9,7 +9,7 @@ import (
 	"math"
 	"sync"
 	"time"
-	"strings"
+
 )
 
 //Variables
@@ -159,8 +159,6 @@ func PrioritizeOrder(order *utilities.Order) {
 
 			for index := range elevators {
 
-				var priority utilities.Priority
-
 				//Fetch elevator
 				priority.Elevator = elevators[index].Elevator
 
@@ -191,15 +189,13 @@ func PrioritizeOrder(order *utilities.Order) {
 					priority.Elevator = priorities[index].Elevator
 					priority.Count = priorities[index].Count
 
-				}
-
 				//If we have the same score - compare IP's. Biggest IP gets order.
-				if priorities[index].Count == priority.Count {
+				} else if priorities[index].Count == priority.Count {
 
 					//Compare
-					if strings.Compare(string(priorities[index].Elevator), string(priority.Elevator)) == utilities.TRUE{
+					if priorities[index].Elevator > priority.Elevator {
 
-						//Change elevator
+						//Change elevator 
 						priority.Elevator = priorities[index].Elevator
 						priority.Count = priorities[index].Count
 
