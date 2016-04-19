@@ -596,7 +596,7 @@ func PrintOrder(order utilities.Order) {
 
 		fmt.Print(filename, " Order outside, ip: ", order.Elevator, ",floor: ", order.Floor, ",direction: ")
 
-		if order.Direction == utilities.BUTTON_UP {
+		if order.Direction == utilities.UP {
 			fmt.Print(" up")
 		} else {
 			fmt.Print(" down")
