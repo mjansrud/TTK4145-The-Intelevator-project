@@ -196,12 +196,9 @@ func PrioritizeOrder(order *utilities.Order) {
 				//If we have the same score - compare IP's. Biggest IP gets order.
 				if priorities[index].Count == priority.Count {
 
-					fmt.Println(filename, "Equals") 
-
 					//Compare
 					if strings.Compare(string(priorities[index].Elevator), string(priority.Elevator)) == utilities.TRUE{
 
-						fmt.Println(filename, "BIGGEST WINS") 
 						//Change elevator
 						priority.Elevator = priorities[index].Elevator
 						priority.Count = priorities[index].Count
