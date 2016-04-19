@@ -9,6 +9,7 @@ import (
 	"math"
 	"sync"
 	"time"
+	"strings"
 )
 
 //Variables
@@ -195,9 +196,12 @@ func PrioritizeOrder(order *utilities.Order) {
 				//If we have the same score - compare IP's. Biggest IP gets order.
 				if priorities[index].Count == priority.Count {
 
-					//Compare
-					if priorities[index].Elevator > priority.Elevator {
+					fmt.Println(filename, "Equals") 
 
+					//Compare
+					if strings.Compare(string(priorities[index].Elevator), string(priority.Elevator)) == utilities.TRUE{
+
+						fmt.Println(filename, "BIGGEST WINS") 
 						//Change elevator
 						priority.Elevator = priorities[index].Elevator
 						priority.Count = priorities[index].Count
@@ -566,7 +570,7 @@ func SetOrders(list []utilities.Order, channel_write chan utilities.Packet) {
 //Checking if orders are equal without checking timestamp
 func IsOrdersEqual(order utilities.Order, compare_order utilities.Order) bool{
 
-	if(order.Elevator  == compare_order.Elevator &&
+	if( order.Elevator  == compare_order.Elevator &&
 		order.Category  == compare_order.Category &&
 		order.Direction == compare_order.Direction &&
 		order.Floor     == compare_order.Floor &&
