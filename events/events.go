@@ -81,7 +81,11 @@ func PollOrder(ch_order_poll chan utilities.Order) {
 	}
 }
 
-//Checks orders against elevators timestamps. Change order if a elevator has disconnected.
+/*
+	1) Function checks if we have a local or external IP which desides if we are connected to the network
+	2) The function loops through the connected elevators and removed them if we havent received a heartbeat within reasonable time
+	3) We loop through all orders and check if they have been executed within x seconds. If not, we assume the hardware/motor is broken.
+*/
 func StatusChecker(channel_write chan utilities.Packet) {
 
 	//Network messages
@@ -165,6 +169,9 @@ func StatusChecker(channel_write chan utilities.Packet) {
 	}
 }
 
+/*
+	Broadcasts a status message to the other elevators each 0.5 seconds.
+*/
 func NetworkLoop(channel_write chan utilities.Packet) {
 
 	//Network messages
@@ -197,7 +204,9 @@ func NetworkLoop(channel_write chan utilities.Packet) {
 
 }
 
-//Listen to the network to communicate with other elevators
+/*
+	Function listens on the network and receives messages from the other elevators.
+*/
 func NetworkListener(channel_listen chan utilities.Packet, channel_write chan utilities.Packet) {
 
 	//Network messages
@@ -297,7 +306,10 @@ func NetworkListener(channel_listen chan utilities.Packet, channel_write chan ut
 
 }
 
-//Hearbeat
+/*
+	Function checks if we have received a heartbeat from the master process locally.
+	If it is longer than 3 seconds since the last heartbeat, spawn as a master.
+*/
 func HeartbeatChecker(channel_backup_quit, channel_backup_init_master chan bool) {
 
 	//Loop
@@ -336,7 +348,9 @@ func HeartbeatChecker(channel_backup_quit, channel_backup_init_master chan bool)
 	}
 }
 
-//Checks orders against elevator timestamp. Change order if a elevator disconnects.
+/*
+	Checks if we received an heartbeat from the backup process locally. Update timestamp on receive.
+*/
 func HeartbeatListener(channel_backup_init_master chan bool, channel_backup_listen chan utilities.Packet) {
 
 	var message_receive utilities.Message
@@ -376,8 +390,7 @@ func HeartbeatListener(channel_backup_init_master chan bool, channel_backup_list
 }
 
 /*
-	Function calls the master each 0.5 second to check if the master is still alive.
-	If the master has died, become a master and spawn a new backup.
+	Function sends a message to the local master process each 0.5 seconds.
 */
 func HeartbeatLoop(channel_backup_write chan utilities.Packet) {
 
